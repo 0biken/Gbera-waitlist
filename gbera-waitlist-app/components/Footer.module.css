@@ -1,0 +1,70 @@
+.footer {
+  position: relative;
+  background: var(--yellow);
+  color: var(--black);
+  padding: clamp(80px, 10vw, 140px) 0 28px;
+  overflow: hidden;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.top h2 { max-width: 13ch; }
+
+.cols {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, auto));
+  gap: clamp(24px, 5vw, 72px);
+  margin-top: clamp(56px, 7vw, 96px);
+}
+
+.col { display: flex; flex-direction: column; gap: 10px; font-size: 0.9375rem; }
+.col h3 {
+  font-family: var(--font-display-stack);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.col a, .col p { color: rgba(18, 18, 18, 0.78); }
+.col a {
+  width: fit-content;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size 0.6s var(--ease), color 0.4s var(--ease);
+}
+.col a:hover { color: var(--black); background-size: 100% 1px; }
+
+/* Giant wordmark, sized to the container width */
+.wordmark {
+  margin-top: clamp(48px, 6vw, 80px);
+  font-family: var(--font-display-stack);
+  font-weight: 700;
+  /* Fill the container: the word is ~2.5em wide at this tracking */
+  font-size: calc((min(100vw, var(--max)) - 2 * var(--gutter)) / 2.56);
+  letter-spacing: -0.07em;
+  line-height: 0.78;
+  color: var(--black);
+  white-space: nowrap;
+  user-select: none;
+  margin-left: -0.04em;
+}
+
+.legal {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(18, 18, 18, 0.18);
+  font-size: 0.8125rem;
+  color: rgba(18, 18, 18, 0.78);
+}
+
+@media (max-width: 640px) {
+  .cols { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+}

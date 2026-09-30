@@ -1,0 +1,464 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}</style><style>:root{color-scheme:light dark;--md-bg:#fff;--md-text:rgba(0,0,0,.8);--md-muted:rgba(0,0,0,.6);--md-fill:rgba(0,0,0,.04);--md-fill-strong:rgba(0,0,0,.06);--md-rule:rgba(0,0,0,.1);--md-rule-strong:rgba(0,0,0,.16);--md-link:hsl(210 100% 45%)}@media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])){--md-bg:#0d0d0d;--md-text:rgba(255,255,255,.85);--md-muted:rgba(255,255,255,.6);--md-fill:rgba(255,255,255,.06);--md-fill-strong:rgba(255,255,255,.09);--md-rule:rgba(255,255,255,.14);--md-rule-strong:rgba(255,255,255,.22);--md-link:hsl(210 100% 72%)}}:root[data-theme="dark"]{color-scheme:dark;--md-bg:#0d0d0d;--md-text:rgba(255,255,255,.85);--md-muted:rgba(255,255,255,.6);--md-fill:rgba(255,255,255,.06);--md-fill-strong:rgba(255,255,255,.09);--md-rule:rgba(255,255,255,.14);--md-rule-strong:rgba(255,255,255,.22);--md-link:hsl(210 100% 72%)}:root[data-theme="light"]{color-scheme:light}@media print{:root,:root[data-theme="dark"]{color-scheme:light;--md-bg:#fff;--md-text:rgba(0,0,0,.8);--md-muted:rgba(0,0,0,.6);--md-fill:rgba(0,0,0,.04);--md-fill-strong:rgba(0,0,0,.06);--md-rule:rgba(0,0,0,.1);--md-rule-strong:rgba(0,0,0,.16);--md-link:hsl(210 100% 45%)}}body{background:var(--md-bg);color:var(--md-text);max-width:720px;margin:0 auto;padding:32px;display:flex;flex-direction:column;gap:10px;font:14px/1.55 -apple-system,BlinkMacSystemFont,'SF Pro','Segoe UI',sans-serif;overflow-wrap:break-word}body>:first-child{margin-top:0}h1,h2,h3,h4,h5,h6{margin:6px 0 0;line-height:1.25;font-weight:600;text-wrap:balance}h1{font-size:1.35em}h2{font-size:1.15em;color:var(--md-muted)}h3,h4,h5,h6{font-size:1em}p,ul,ol,blockquote,table,pre,hr{margin:0}strong{font-weight:600}a{color:var(--md-link);text-decoration:none}a:hover{text-decoration:underline}ul,ol{display:flex;flex-direction:column;gap:6px;padding-left:22px}ul{list-style:disc}ol{list-style:decimal}:is(li,td,th)>*+:is(p,ul,ol,blockquote){margin-top:6px}blockquote{display:flex;flex-direction:column;gap:10px;border-left:2px solid var(--md-rule);padding-left:10px;color:var(--md-muted)}:not(pre)>code{background:var(--md-fill);padding:1px 3px;border-radius:4px;font:.92em 'SF Mono',ui-monospace,Menlo,Consolas,monospace}a>code{background:none;color:inherit}pre{background:var(--md-fill);padding:10px 12px;border-radius:6px;overflow-x:auto;font:12px/1.5 'SF Mono',ui-monospace,Menlo,Consolas,monospace;margin-block:4px}pre code{background:none;padding:0;font:inherit}table{width:100%;border-collapse:separate;border-spacing:2px;font:inherit}th,td{padding:6px 8px;border-radius:3px;text-align:left;vertical-align:top}th{background:var(--md-fill-strong);font-weight:600}td{background:var(--md-fill)}:is(th,td) :not(pre)>code{background:transparent}hr{border:0;border-top:1px solid var(--md-rule-strong);margin-block:10px}img{max-width:100%;height:auto;border-radius:4px}</style>
+</head><body>
+<h1>Product Requirements Document: Gbera Platform</h1>
+<p><strong>Version:</strong> 1.0
+<strong>Status:</strong> Draft for review
+<strong>Audience:</strong> Engineering, Product, Design, Stakeholders
+<strong>Scope:</strong> v1 — University of Ibadan campus mobility</p>
+<blockquote>
+<p><strong>How to read this document:</strong> Sections marked <strong>🟡 Assumption</strong> are gaps in the original brief that have been filled with a reasonable default so the team can move forward. Each is flagged so it can be confirmed or overridden in review — treat these as decisions to ratify, not settled facts.</p>
+</blockquote>
+<hr>
+<h2>1. Overview</h2>
+<h3>1.1 Problem statement</h3>
+<p>Students at the University of Ibadan rely on informal, unstructured keke (tricycle) transit to move around campus. This is slow to negotiate, priced inconsistently, and offers no safety net, tracking, or accountability.</p>
+<h3>1.2 Product vision</h3>
+<p>Gbera is a closed, campus-only ride-sharing platform that replaces ad hoc keke transit with fast, flat-rate, trackable rides — matched by real campus geography rather than generic city mapping.</p>
+<h3>1.3 Goals for v1</h3>
+<ul>
+<li>Launch a working three-sided marketplace (Rider, Driver, Admin) scoped to a single campus.</li>
+<li>Prove out shared-ride matching logic and flat-rate pricing.</li>
+<li>Establish a safe, verified, closed-loop payment system (escrow wallet).</li>
+<li>Ship the safety and verification baseline required for university administration buy-in.</li>
+</ul>
+<h3>1.4 Out of scope for v1</h3>
+<p>🟡 <strong>Assumption</strong> — not stated in the original brief; added so scope boundaries are explicit and defensible in stakeholder review.</p>
+<ul>
+<li>Multi-campus or inter-campus rides (e.g., UI to a different university).</li>
+<li>Off-campus destinations (town runs, airport transfers).</li>
+<li>Package/parcel delivery.</li>
+<li>Third-party/non-university-affiliated riders or drivers.</li>
+<li>Native Android/iOS parity at launch — 🟡 <strong>Assumption:</strong> v1 targets a single platform first (recommend deciding this explicitly; not specified in the brief).</li>
+<li>Driver-side vehicle types beyond keke (no cars, no okada/bikes) unless confirmed otherwise.</li>
+</ul>
+<hr>
+<h2>2. User Roles &amp; Personas</h2>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Description</th>
+<th>Access</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Rider</strong></td>
+<td>Verified UI student booking rides</td>
+<td>Rider App</td>
+</tr>
+<tr>
+<td><strong>Driver</strong></td>
+<td>Vetted keke operator affiliated with the recognized campus transport authority</td>
+<td>Driver App</td>
+</tr>
+<tr>
+<td><strong>Admin</strong></td>
+<td>Gbera/university-appointed operator managing zones, disputes, and verification</td>
+<td>Admin Web Portal</td>
+</tr>
+</tbody>
+</table>
+<p>🟡 <strong>Assumption:</strong> A single person cannot hold both Rider and Driver roles on the same account in v1 (avoids fraud/rating-manipulation edge cases). Confirm with stakeholders if dual-role accounts (e.g., a student who also drives) should be supported later.</p>
+<p>🟡 <strong>Assumption:</strong> &quot;Admin&quot; is a single tier in v1 — no separate distinction between a Gbera-employed admin and a university transport-authority admin. If the university needs its own restricted view (e.g., read-only oversight without moderation power), that's a v1.1 role split, not v1.</p>
+<hr>
+<h2>3. Application Ecosystem</h2>
+<h3>3.1 Rider Application</h3>
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Onboarding &amp; Verification</td>
+<td>Gated by University of Ibadan student email or matriculation number</td>
+</tr>
+<tr>
+<td>Core Map</td>
+<td>Custom layer over Google Maps; city clutter stripped; campus landmarks, faculties, and designated wait spots surfaced</td>
+</tr>
+<tr>
+<td>Ride Management</td>
+<td>Real-time active ride tracking, ride history, in-app wallet</td>
+</tr>
+<tr>
+<td>Communication</td>
+<td>In-app call/chat with driver; personal numbers never exposed</td>
+</tr>
+</tbody>
+</table>
+<h3>3.2 Driver Application</h3>
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dispatch Radar</td>
+<td>Views ride requests within a 2–3 minute geographic radius</td>
+</tr>
+<tr>
+<td>Status Toggles</td>
+<td>Manual online/offline; auto-&quot;busy&quot; on ride acceptance; scheduled auto on/off tied to campus curfew or transport authority hours</td>
+</tr>
+<tr>
+<td>Financial Dashboard</td>
+<td>Daily/weekly earnings, completed trips, wallet balance</td>
+</tr>
+</tbody>
+</table>
+<h3>3.3 Admin &amp; Superuser Portal</h3>
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>System Oversight</td>
+<td>Live dashboard of campus zones and demand surges (e.g., Kuti Hall, Faculty of Science peak hours)</td>
+</tr>
+<tr>
+<td>Configuration</td>
+<td>System-wide variables — e.g., the default 15-second shared-ride matching timer</td>
+</tr>
+<tr>
+<td>Moderation</td>
+<td>Dispute handling, driver verification processing, platform integrity tools</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>4. Payment Infrastructure &amp; Wallet Logic</h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Specification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pricing</td>
+<td>Shared Ride: ₦200–₦300 flat. Exclusive Drop: ₦500 flat.</td>
+</tr>
+<tr>
+<td>Escrow</td>
+<td>Fare deducted from rider wallet on request, held in escrow, released to driver on trip completion</td>
+</tr>
+<tr>
+<td>Funding</td>
+<td>Local payment gateway (e.g., Paystack) — card or bank transfer top-up</td>
+</tr>
+<tr>
+<td>Driver Payouts</td>
+<td>Custom 3-digit internal account numbers per driver for instant routing, commission deduction, and external withdrawal</td>
+</tr>
+</tbody>
+</table>
+<h3>4.1 Escrow interaction with penalties</h3>
+<p>🟡 <strong>Assumption</strong> — the brief specifies escrow release &quot;on successful trip completion&quot; and a no-show penalty separately, but doesn't define how these interact. Recommended default:</p>
+<ul>
+<li>If the <strong>rider no-shows</strong>: the escrowed fare is released to the driver in full as compensation (trip is marked &quot;rider no-show,&quot; not &quot;completed,&quot; for reporting purposes), and the rider's platform rating drops. No <em>additional</em> deduction beyond the original fare unless Admin policy sets a separate no-show fee — flag for stakeholder confirmation.</li>
+<li>If the <strong>driver cancels post-acceptance (OGA protocol)</strong>: the rider's escrowed fare is <strong>not</strong> released — it remains held against the rider's next matched trip, so the rider is never charged twice for one journey.</li>
+</ul>
+<hr>
+<h2>5. Ride Logic, Mapping &amp; Edge Cases</h2>
+<h3>5.1 Pick-up and mapping constraints</h3>
+<ul>
+<li><strong>Designated Wait Spots</strong> — Shared Ride pickups are restricted to official campus bus stops or landmark points.</li>
+<li><strong>Convergence Requirement</strong> — a Shared Ride request from a non-designated point is redirected to the nearest official wait spot.</li>
+<li><strong>Search Logic</strong> — matching prioritizes exact destination match, then route proximity, before dispatch.</li>
+</ul>
+<p>🟡 <strong>Assumption on convergence flow</strong> — not specified how the redirect is presented to the rider. Recommended default: the app auto-snaps the pin to the nearest wait spot and shows it on the confirmation sheet as &quot;Pickup adjusted to [Wait Spot Name] — 2 min walk,&quot; with the rider able to confirm or manually pick a different listed wait spot. It should never silently move the pin without the rider seeing the change.</p>
+<h3>5.2 Queue management &amp; edge cases</h3>
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Matching timeout</strong></td>
+<td>No shared-ride match within ~15s → prompt rider to upgrade to Exclusive (₦500) for immediate dispatch</td>
+</tr>
+<tr>
+<td><strong>Driver cancellation (OGA Protocol)</strong></td>
+<td>Rider returns to dispatch pool; accumulated wait time carries forward as top queue priority</td>
+</tr>
+<tr>
+<td><strong>No-show</strong></td>
+<td>Rider fails to reach wait spot within grace period after driver arrival → escrow penalty to driver + rider rating drop</td>
+</tr>
+</tbody>
+</table>
+<p>🟡 <strong>Assumption:</strong> Grace period for no-show is not specified. Recommend <strong>3 minutes</strong> from driver-arrival timestamp as a starting default, configurable by Admin (see §3.3 configuration controls).</p>
+<p>🟡 <strong>Assumption — curfew auto-toggle mid-ride:</strong> not specified in the brief. Recommended default: a scheduled auto-offline toggle <strong>never interrupts a ride in progress</strong> — it only prevents the driver from being dispatched <em>new</em> requests after the curfew threshold. The driver is allowed to complete any active trip, then goes offline automatically.</p>
+<hr>
+<h2>6. Campus Safety &amp; Verification</h2>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Rider Security</td>
+<td>University-verified access only; SOS panic button; one-tap &quot;share my ride&quot; live-tracking link</td>
+</tr>
+<tr>
+<td>Driver Vetting</td>
+<td>Closed to general public — must belong to recognized campus transport authority</td>
+</tr>
+<tr>
+<td>Physical Verification</td>
+<td>Profile photo match + physical tricycle inspection + valid campus operating permit, reviewed by Admin before activation</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>7. Non-Functional Requirements</h2>
+<p>🟡 <strong>Assumption</strong> — this entire section is absent from the original brief and is added because a PRD without NFRs is unreviewable by engineering. All figures below are starting proposals, not commitments — confirm with engineering leadership.</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Requirement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Matching latency</td>
+<td>Dispatch radar results returned in &lt; 2s of a ride request</td>
+</tr>
+<tr>
+<td>Availability</td>
+<td>99.5% uptime target for booking and matching services during campus operating hours</td>
+</tr>
+<tr>
+<td>Data privacy</td>
+<td>Student email/matric number and location history treated as PII; retained only as long as needed for dispute resolution (recommend 90 days), per applicable Nigerian data protection guidance (NDPR)</td>
+</tr>
+<tr>
+<td>Connectivity</td>
+<td>Core booking flow must degrade gracefully on 2G/3G campus wifi — map tiles cached, ride state resilient to brief disconnects</td>
+</tr>
+<tr>
+<td>Payment security</td>
+<td>Escrow and wallet balances reconciled via the payment gateway's ledger; no wallet balance stored as the sole source of truth client-side</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>8. User Stories &amp; Acceptance Criteria</h2>
+<h3>Epic A — Rider Onboarding</h3>
+<p><strong>A1. As a prospective rider, I want to verify my identity with my university email or matric number, so that only real UI students can access the platform.</strong></p>
+<ul>
+<li>Given a new user signs up, when they enter a non-UI email or unrecognized matric number, then signup is blocked with a clear error.</li>
+<li>Given a valid UI email, when the user submits it, then a verification code/link is sent and the account remains inactive until verified.</li>
+</ul>
+<h3>Epic B — Booking a Shared Ride</h3>
+<p><strong>B1. As a rider, I want to request a Shared Ride from a nearby wait spot, so that I can get a flat-rate ride quickly.</strong></p>
+<ul>
+<li>Given the rider opens the map, when they are not standing at a designated wait spot, then the app shows the nearest wait spot and requires confirmation before booking (§5.1).</li>
+<li>Given a valid pickup and destination, when the rider taps &quot;Find your ride,&quot; then the system begins matching within the configured timeout window (default 15s).</li>
+</ul>
+<p><strong>B2. As a rider, I want to be offered an Exclusive upgrade if no shared match is found quickly, so that I'm not stuck waiting indefinitely.</strong></p>
+<ul>
+<li>Given 15 seconds elapse with no shared match, when the timeout fires, then the rider is prompted: &quot;No shared ride yet — upgrade to Exclusive for ₦500?&quot; with Accept/Keep Waiting options.</li>
+<li>Given the rider accepts the upgrade, then a driver is dispatched immediately at the Exclusive rate and escrow is adjusted to ₦500.</li>
+</ul>
+<h3>Epic C — Driver Cancellation (OGA Protocol)</h3>
+<p><strong>C1. As a rider whose driver cancels after accepting, I want to be immediately requeued with priority, so that I don't lose my place after already waiting.</strong></p>
+<ul>
+<li>Given a driver cancels after acceptance, when the cancellation is registered, then the rider is returned to the dispatch pool with their original wait-time timestamp preserved (not reset to zero).</li>
+<li>Given the rider is requeued, then they rank above all new requests submitted after their original request time.</li>
+</ul>
+<h3>Epic D — No-Show Handling</h3>
+<p><strong>D1. As a driver, I want to be compensated if a rider fails to show up, so that my time isn't wasted for free.</strong></p>
+<ul>
+<li>Given a driver arrives at the wait spot, when the rider does not appear within the grace period (default 3 min, §5.2), then the trip is marked &quot;rider no-show,&quot; escrow is released to the driver, and the rider's rating is decremented.</li>
+<li>Given a no-show is recorded, then the rider receives a notification explaining the penalty and rating impact.</li>
+</ul>
+<h3>Epic E — Driver Shift Management</h3>
+<p><strong>E1. As a driver, I want my shift to end automatically at curfew, so that I don't need to remember to go offline manually.</strong></p>
+<ul>
+<li>Given a driver is online as curfew approaches, when the curfew threshold is reached and the driver has no active ride, then the driver is set offline automatically.</li>
+<li>Given a driver is mid-ride at curfew, when curfew triggers, then the current ride is allowed to complete before the driver is set offline (§5.2).</li>
+</ul>
+<h3>Epic F — Safety</h3>
+<p><strong>F1. As a rider, I want to share my live ride with a friend, so that someone knows where I am during the trip.</strong></p>
+<ul>
+<li>Given an active ride, when the rider taps &quot;Share my ride,&quot; then a live-tracking link is generated and can be sent via any external channel.</li>
+<li>Given the ride ends, then the shared link expires and no longer shows live location.</li>
+</ul>
+<p><strong>F2. As a rider, I want an SOS button during a ride, so that I can get help quickly in an emergency.</strong></p>
+<ul>
+<li>Given an active ride, when the rider taps SOS, then Admin/campus security is alerted with the rider's live location and ride ID within a defined SLA (🟡 <strong>Assumption:</strong> recommend &lt; 10 seconds; confirm with campus security integration partner).</li>
+</ul>
+<h3>Epic G — Admin Verification</h3>
+<p><strong>G1. As an Admin, I want to review and approve driver documentation before activation, so that only vetted drivers can go online.</strong></p>
+<ul>
+<li>Given a driver submits a profile photo, campus operating permit, and passes physical tricycle inspection, when Admin reviews the submission, then the driver account can only be toggled &quot;active&quot; after all three checks are marked complete.</li>
+</ul>
+<hr>
+<h2>9. Key Flows</h2>
+<h3>9.1 Shared Ride Booking — Happy Path &amp; Timeout Branch</h3>
+<pre class="mermaid">flowchart TD
+    A[Rider opens app] --&gt; B{At a designated wait spot?}
+    B -- No --&gt; C[App suggests nearest wait spot]
+    C --&gt; D[Rider confirms adjusted pickup]
+    B -- Yes --&gt; E[Rider sets destination]
+    D --&gt; E
+    E --&gt; F[Rider taps &#39;Find your ride&#39;]
+    F --&gt; G[Matching engine searches ~15s]
+    G --&gt; H{Match found?}
+    H -- Yes --&gt; I[Driver dispatched, escrow holds ₦200-300]
+    H -- No, timeout --&gt; J[Prompt: Upgrade to Exclusive ₦500?]
+    J -- Accept --&gt; K[Driver dispatched immediately, escrow adjusted to ₦500]
+    J -- Keep waiting --&gt; G
+    I --&gt; L[Ride in progress]
+    K --&gt; L
+    L --&gt; M[Trip completed]
+    M --&gt; N[Escrow released to driver]
+</pre>
+<h3>9.2 Driver Cancellation — OGA Protocol</h3>
+<pre class="mermaid">flowchart TD
+    A[Driver accepts ride] --&gt; B[Driver en route]
+    B --&gt; C{Driver forced to cancel?}
+    C -- No --&gt; D[Pickup proceeds normally]
+    C -- Yes, e.g. breakdown --&gt; E[Cancellation registered]
+    E --&gt; F[Rider returned to dispatch pool]
+    F --&gt; G[Original wait-time timestamp preserved]
+    G --&gt; H[Rider ranked above all newer requests]
+    H --&gt; I[New driver matched with priority]
+</pre>
+<h3>9.3 No-Show Penalty Path</h3>
+<pre class="mermaid">flowchart TD
+    A[Driver arrives at wait spot] --&gt; B[Grace period starts, default 3 min]
+    B --&gt; C{Rider arrives in time?}
+    C -- Yes --&gt; D[Trip proceeds normally]
+    C -- No --&gt; E[Trip marked &#39;rider no-show&#39;]
+    E --&gt; F[Escrowed fare released to driver in full]
+    F --&gt; G[Rider platform rating decremented]
+    G --&gt; H[Rider notified of penalty]
+</pre>
+<h3>9.4 Driver Verification (Admin)</h3>
+<pre class="mermaid">flowchart TD
+    A[Driver submits application] --&gt; B[Profile photo uploaded]
+    A --&gt; C[Campus operating permit submitted]
+    A --&gt; D[Physical tricycle inspection scheduled]
+    B --&gt; E{All three checks complete?}
+    C --&gt; E
+    D --&gt; E
+    E -- No --&gt; F[Account remains inactive]
+    E -- Yes --&gt; G[Admin approves activation]
+    G --&gt; H[Driver account set active, can go online]
+</pre>
+<hr>
+<h2>10. Open Questions for Stakeholder Review</h2>
+<p>This list consolidates every 🟡 assumption above into a single review checklist:</p>
+<ol>
+<li>Should dual Rider/Driver accounts be permitted (even in a later version)?</li>
+<li>Is a second, restricted Admin tier needed for university transport-authority oversight?</li>
+<li>What is the exact no-show grace period? (Default proposed: 3 minutes)</li>
+<li>Is there an additional no-show fee beyond forfeiting the escrowed fare?</li>
+<li>Should the convergence-to-wait-spot redirect be auto-confirmed or always require manual rider confirmation?</li>
+<li>What data retention period applies to location/ride history for NDPR compliance? (Default proposed: 90 days)</li>
+<li>Is iOS/Android parity required at v1 launch, or is a single platform acceptable first?</li>
+<li>What SLA is required for SOS alerts reaching campus security?</li>
+</ol>
+<hr>
+<p><strong>Document maintained by:</strong> Product &amp; Engineering
+<strong>Next review:</strong> Upon stakeholder sign-off of Section 10 open questions</p>
+
+
+<!--claude-mermaid-runtime-begin:3477-->
+<style>.mermaid-diagram{margin-block:4px}.mermaid-diagram svg{display:block;margin:0 auto;max-width:100%;height:auto}</style>
+<script src="/_runtime/mermaid-11.16.1.min.js"></script>
+<script>(function(){
+var CFG={"palettes":{"light":{"surface":"#f4efe4","text":"#42392e","line":"#8a7f6d","border":"#7a6c52","bg":"#fffdf8"},"dark":{"surface":"#262b34","text":"#f2f3f5","line":"#a8adb8","border":"#9aa4b8","bg":"#1f232b"}}};
+if(typeof mermaid==='undefined')return;
+var pres=Array.prototype.slice.call(document.querySelectorAll('pre.mermaid')).filter(function(p){if(p.hasAttribute('data-claude-mermaid-claimed'))return false;p.setAttribute('data-claude-mermaid-claimed','1');return true;});
+if(!pres.length)return;
+var mq=window.matchMedia?window.matchMedia('(prefers-color-scheme: dark)'):null;
+var root=document.documentElement;
+var items=pres.map(function(pre){
+var mount=document.createElement('div');mount.className='mermaid-diagram';
+return {pre:pre,mount:mount,src:pre.textContent||''};
+});
+var seq=0;
+var renderGen=0;
+var lastKey='';
+function pageBg(fallback){
+var els=[document.body,document.documentElement];
+for(var i=0;i<els.length;i++){
+var c=els[i]&&getComputedStyle(els[i]).backgroundColor;
+if(c&&c!=='transparent'&&c!=='rgba(0, 0, 0, 0)')return c;
+}
+return fallback;
+}
+function render(){
+var theme=root.getAttribute('data-theme');
+var dark=theme==='dark'||(!!(mq&&mq.matches)&&theme!=='light');
+var pal=dark?CFG.palettes.dark:CFG.palettes.light;
+var bg=pageBg(pal.bg);
+var key=(dark?'d':'l')+'|'+bg;
+if(key===lastKey)return;
+lastKey=key;
+var gen=++renderGen;
+var font=getComputedStyle(document.body).fontFamily||'sans-serif';
+var nat={useMaxWidth:false};
+mermaid.initialize({
+startOnLoad:false,securityLevel:'strict',theme:'base',
+flowchart:nat,sequence:nat,er:nat,state:nat,class:nat,pie:nat,
+gantt:nat,journey:nat,timeline:nat,gitGraph:nat,mindmap:nat,xyChart:nat,
+quadrantChart:nat,sankey:nat,c4:nat,requirement:nat,block:nat,
+packet:nat,kanban:nat,architecture:nat,radar:nat,
+themeVariables:{background:bg,mainBkg:pal.surface,primaryColor:pal.surface,
+primaryTextColor:pal.text,lineColor:pal.line,primaryBorderColor:pal.border,
+nodeBorder:pal.border,clusterBorder:pal.border,edgeLabelBackground:bg,
+clusterBkg:'rgba(127,127,127,0.07)',titleColor:pal.text,
+darkMode:dark,rowOdd:bg,rowEven:'rgba(127,127,127,0.07)',
+attributeBackgroundColorOdd:bg,attributeBackgroundColorEven:'rgba(127,127,127,0.07)',
+fontSize:'16px',fontFamily:font},
+themeCSS:'.node rect, .node circle, .node polygon, .node path, .cluster rect { stroke-width: 2px; }'
+});
+items.forEach(function(it){
+var id='claude-mermaid-'+seq++;
+mermaid.render(id,it.src).then(function(r){
+if(gen!==renderGen)return;
+var prev=it.pre.previousElementSibling;
+if(prev&&prev.className==='mermaid-diagram'&&prev!==it.mount)return;
+it.mount.innerHTML=r.svg;
+if(!it.mount.parentNode)it.pre.parentNode.insertBefore(it.mount,it.pre);
+it.pre.style.display='none';
+},function(){
+var scratch=document.getElementById(id);
+if(scratch)scratch.parentNode.removeChild(scratch);
+scratch=document.getElementById('d'+id);
+if(scratch)scratch.parentNode.removeChild(scratch);
+if(gen!==renderGen)return;
+if(it.mount.parentNode)it.mount.parentNode.removeChild(it.mount);
+it.pre.style.display='';
+});
+});
+}
+render();
+if(mq&&mq.addEventListener)mq.addEventListener('change',render);
+if(typeof MutationObserver!=='undefined')new MutationObserver(render).observe(root,{attributes:true,attributeFilter:['data-theme']});
+})();</script>
+<!--claude-mermaid-runtime-end-->
+</body></html>
