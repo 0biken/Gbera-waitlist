@@ -89,11 +89,11 @@
 .menuBtn[aria-expanded='true'] span:nth-child(1) { transform: translateY(4px) rotate(45deg); }
 .menuBtn[aria-expanded='true'] span:nth-child(2) { transform: translateY(-4px) rotate(-45deg); }
 
-/* Full-screen menu */
 .overlay {
   position: fixed;
   inset: 0;
   z-index: 0;
+  pointer-events: auto;
   display: none;
   flex-direction: column;
   justify-content: center;

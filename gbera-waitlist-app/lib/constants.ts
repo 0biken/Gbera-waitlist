@@ -3,6 +3,7 @@ export const FACULTIES = [
   'Faculty of Arts',
   'Faculty of Basic Medical Sciences',
   'Faculty of Clinical Sciences',
+  'Faculty of Computing',
   'Faculty of Dentistry',
   'Faculty of Education',
   'Faculty of Law',
