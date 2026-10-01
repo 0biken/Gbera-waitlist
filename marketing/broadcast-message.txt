@@ -7,6 +7,6 @@ Gbera is a keke app built only for University of Ibadan:
 - Pickup at places you already know: Kuti Hall, Main Gate, the SUB, your faculty.
 
 We're launching soon and the first people on the waitlist ride first.
-Join here (takes one minute, free): https://gbera.ng
+Join here (takes one minute, free): https://gbera-waitlist-app.vercel.app
 
 Please forward to your hall, faculty and department groups.
