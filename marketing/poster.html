@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gbera Waitlist Poster</title>
+<!--
+  Broadcast poster. Render with marketing/render-poster.js.
+  Query params:  ?format=feed (1080x1350, default) | status (1080x1920)
+                 &url=gbera.ng  (the link printed on the poster)
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=block" rel="stylesheet" />
+<style>
+  :root {
+    --yellow: #FFC300;
+    --yellow-deep: #E5B000;
+    --black: #121212;
+    --paper: #FFFDF7;
+    --cream: #F1EEE3;
+    --green: #0A8754;
+    --display: 'Space Grotesk', system-ui, sans-serif;
+    --body: 'Geist', system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { background: #222; }
+
+  .poster {
+    position: relative;
+    width: 1080px;
+    height: 1350px;
+    overflow: hidden;
+    padding: 76px 72px 68px;
+    display: flex;
+    flex-direction: column;
+    color: var(--black);
+    font-family: var(--body);
+    background:
+      radial-gradient(70% 45% at 8% 4%, #ffe27f 0%, rgba(255, 226, 127, 0) 60%),
+      radial-gradient(60% 45% at 100% 100%, #efad00 0%, rgba(239, 173, 0, 0) 62%),
+      var(--yellow);
+  }
+
+  .status .poster { height: 1920px; padding: 104px 72px 96px; }
+
+  /* faint roads + grain */
+  .roads { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.12; }
+  .grain {
+    position: absolute; inset: 0; opacity: 0.07; pointer-events: none; mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .content { position: relative; z-index: 1; display: flex; flex-direction: column; height: 100%; }
+
+  /* header */
+  .top { display: flex; justify-content: space-between; align-items: center; }
+  .brand { display: flex; align-items: center; gap: 16px; font-family: var(--display); font-weight: 700; font-size: 50px; letter-spacing: -0.045em; }
+  .mark { position: relative; width: 50px; height: 50px; border-radius: 50%; background: var(--yellow); box-shadow: inset 0 0 0 3px var(--black); }
+  .mark::after { content: ''; position: absolute; inset: 14px; border-radius: 50%; background: var(--black); }
+  .tag {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 26px 14px 20px; border-radius: 999px;
+    background: var(--black); color: var(--paper);
+    font-family: var(--display); font-weight: 600; font-size: 25px; letter-spacing: -0.01em;
+  }
+  .tag i { width: 12px; height: 12px; border-radius: 50%; background: var(--yellow); box-shadow: 0 0 0 5px rgba(255, 195, 0, 0.25); }
+
+  /* headline */
+  h1 {
+    margin-top: 64px;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 150px;
+    line-height: 0.9;
+    letter-spacing: -0.055em;
+  }
+  h1 span { display: block; }
+  .lead {
+    margin-top: 30px;
+    max-width: 548px;
+    font-size: 34px;
+    line-height: 1.32;
+    letter-spacing: -0.01em;
+    color: rgba(18, 18, 18, 0.84);
+  }
+  .lead b { font-weight: 600; color: var(--black); }
+
+  /* fares card, double bezel */
+  .fares-wrap { position: relative; margin-top: auto; }
+  .shell { padding: 9px; border-radius: 56px; background: rgba(18, 18, 18, 0.08); box-shadow: inset 0 0 0 1.5px rgba(18, 18, 18, 0.1); }
+  .fares {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-radius: 47px;
+    background: var(--black);
+    color: var(--paper);
+    padding: 44px 48px 40px;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.18), 0 40px 70px -40px rgba(18, 18, 18, 0.7);
+  }
+  .fare + .fare { padding-left: 44px; border-left: 1.5px dashed rgba(255, 253, 247, 0.22); }
+  .fare small { display: block; font-family: var(--display); font-weight: 600; font-size: 24px; letter-spacing: 0.02em; color: rgba(255, 253, 247, 0.62); }
+  .fare b { display: block; margin-top: 8px; font-family: var(--display); font-weight: 700; font-size: 118px; line-height: 0.92; letter-spacing: -0.06em; color: var(--yellow); }
+  .fare span { display: block; margin-top: 14px; font-size: 25px; line-height: 1.3; color: rgba(255, 253, 247, 0.8); }
+
+  .keke {
+    position: absolute;
+    right: 18px;
+    top: -212px;
+    width: 400px;
+    transform: rotate(-5deg);
+    filter: drop-shadow(0 26px 22px rgba(18, 18, 18, 0.28));
+  }
+
+  /* benefit chips */
+  .chips { display: flex; gap: 14px; margin-top: 30px; }
+  .chip {
+    flex: 1;
+    display: flex; align-items: center; gap: 14px;
+    padding: 20px 22px;
+    border-radius: 28px;
+    background: rgba(255, 253, 247, 0.6);
+    box-shadow: inset 0 0 0 1.5px rgba(18, 18, 18, 0.08);
+    font-family: var(--display); font-weight: 600; font-size: 25px; letter-spacing: -0.015em; line-height: 1.12;
+  }
+  .chip svg { flex: 0 0 auto; }
+
+  /* CTA */
+  .cta {
+    margin-top: 30px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 18px 18px 48px;
+    border-radius: 999px;
+    background: var(--black);
+    color: var(--paper);
+  }
+  .cta-text b { display: block; font-family: var(--display); font-weight: 700; font-size: 46px; letter-spacing: -0.04em; line-height: 1.05; }
+  .cta-text span { display: block; margin-top: 4px; font-family: var(--display); font-weight: 600; font-size: 31px; letter-spacing: -0.02em; color: var(--yellow); }
+  .cta-icon { display: grid; place-items: center; width: 118px; height: 118px; border-radius: 50%; background: var(--yellow); color: var(--black); }
+
+  .fine { margin-top: 22px; text-align: center; font-size: 23px; color: rgba(18, 18, 18, 0.74); letter-spacing: -0.005em; }
+
+  /* status-only map panel */
+  .map-panel { display: none; }
+  .status .map-panel { display: block; margin-top: 48px; }
+  .map-core { position: relative; height: 390px; border-radius: 47px; overflow: hidden; background: var(--cream); box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.7); }
+  .map-core svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .status h1 { margin-top: 84px; font-size: 162px; }
+  .status .lead { font-size: 36px; max-width: 800px; }
+  /* the keke drives out of the bottom-right of the map onto the fares card */
+  .status .keke { width: 360px; top: -186px; right: 34px; }
+</style>
+</head>
+<body>
+<div class="poster">
+  <svg class="roads" viewBox="0 0 1080 1350" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <g fill="none" stroke="#121212" stroke-width="2">
+      <path d="M-40 980 C 220 960 360 760 600 740 S 960 520 1120 300" />
+      <path d="M-40 1040 C 260 1030 400 830 640 810 S 1000 600 1120 380" />
+      <path d="M180 1400 C 240 1100 420 900 520 600 S 600 120 660 -40" />
+    </g>
+  </svg>
+  <div class="grain"></div>
+
+  <div class="content">
+    <div class="top">
+      <div class="brand"><span class="mark"></span>Gbera</div>
+      <div class="tag"><i></i>Coming to UI</div>
+    </div>
+
+    <h1><span>No haggling.</span><span>Just ride.</span></h1>
+    <p class="lead">Flat-rate keke rides across <b>University of Ibadan</b>, with verified drivers and live tracking.</p>
+
+    <div class="map-panel">
+      <div class="shell">
+        <div class="map-core">
+          <svg viewBox="0 66 800 364" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <rect width="800" height="470" fill="#F1EEE3" />
+            <g fill="#0A8754" opacity="0.13">
+              <path d="M40 120 C 80 80 170 90 190 140 C 205 190 150 225 90 215 C 40 205 20 160 40 120 Z" />
+              <path d="M520 300 C 570 270 680 280 700 330 C 710 380 640 420 580 410 C 530 400 490 330 520 300 Z" />
+              <path d="M330 10 C 380 -10 460 10 470 50 C 480 100 410 120 360 100 C 320 85 310 30 330 10 Z" />
+            </g>
+            <g fill="#E6E1D0">
+              <rect x="30" y="250" width="110" height="80" rx="10" /><rect x="210" y="30" width="90" height="70" rx="10" />
+              <rect x="560" y="40" width="120" height="80" rx="10" /><rect x="420" y="330" width="80" height="80" rx="10" />
+              <rect x="660" y="190" width="100" height="70" rx="10" /><rect x="250" y="360" width="100" height="70" rx="10" />
+            </g>
+            <g fill="none" stroke-linecap="round">
+              <g stroke="#D9D4C2" stroke-width="30">
+                <path d="M-20 400 C 160 390 240 260 400 240 S 620 170 820 40" />
+                <path d="M130 -20 C 170 100 280 160 400 240 S 460 400 560 500" />
+                <path d="M-20 190 C 160 200 300 140 440 130 S 680 140 820 170" />
+              </g>
+              <g stroke="#FFFDF7" stroke-width="22">
+                <path d="M-20 400 C 160 390 240 260 400 240 S 620 170 820 40" />
+                <path d="M130 -20 C 170 100 280 160 400 240 S 460 400 560 500" />
+                <path d="M-20 190 C 160 200 300 140 440 130 S 680 140 820 170" />
+              </g>
+              <path d="M90 396 C 200 380 250 262 400 240 S 600 176 700 104" stroke="#FFC300" stroke-width="16" opacity="0.6" />
+              <path d="M90 396 C 200 380 250 262 400 240 S 600 176 700 104" stroke="#121212" stroke-width="6" stroke-dasharray="1 16" />
+            </g>
+            <g font-family="Space Grotesk, sans-serif" font-weight="600" font-size="22">
+              <g><circle cx="90" cy="396" r="13" fill="#FFC300" stroke="#121212" stroke-width="4" /><circle cx="90" cy="396" r="4" fill="#121212" />
+                <rect x="112" y="376" width="138" height="40" rx="20" fill="#FFFDF7" stroke="#121212" stroke-opacity="0.14" /><text x="181" y="403" text-anchor="middle" fill="#121212">Main Gate</text></g>
+              <g><circle cx="400" cy="240" r="13" fill="#FFC300" stroke="#121212" stroke-width="4" /><circle cx="400" cy="240" r="4" fill="#121212" />
+                <rect x="422" y="250" width="76" height="40" rx="20" fill="#FFFDF7" stroke="#121212" stroke-opacity="0.14" /><text x="460" y="277" text-anchor="middle" fill="#121212">SUB</text></g>
+              <g><circle cx="700" cy="104" r="13" fill="#FFC300" stroke="#121212" stroke-width="4" /><circle cx="700" cy="104" r="4" fill="#121212" />
+                <rect x="508" y="84" width="170" height="40" rx="20" fill="#FFFDF7" stroke="#121212" stroke-opacity="0.14" /><text x="593" y="111" text-anchor="middle" fill="#121212">Kuti Hall</text></g>
+              <circle cx="300" cy="300" r="16" fill="#121212" stroke="#FFC300" stroke-width="5" />
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="fares-wrap">
+      <svg class="keke" viewBox="0 0 260 170" fill="none" aria-hidden="true">
+        <path d="M84 26h128c9 0 16 7 16 16v4H66l6-10c3-6 7-10 12-10z" fill="#121212" />
+        <path d="M196 46h32v74h-32z" fill="#FFFDF7" />
+        <path d="M204 56h16v26h-16z" fill="#121212" opacity="0.85" />
+        <path d="M140 78c0-3 2-5 5-5h45c3 0 6 2 6 5v26h-56V78z" fill="#121212" opacity="0.82" />
+        <path d="M124 46v52" stroke="#121212" stroke-width="5" stroke-linecap="round" />
+        <path d="M72 46c-12 14-20 30-24 50h26l14-50H72z" fill="#121212" opacity="0.22" />
+        <path d="M72 46c-12 14-20 30-24 50" stroke="#121212" stroke-width="5" stroke-linecap="round" />
+        <path d="M78 84l14-4" stroke="#121212" stroke-width="3.5" stroke-linecap="round" />
+        <path d="M52 94h176v28a6 6 0 01-6 6H34a8 8 0 01-8-8c0-12 10-22 26-26z" fill="#FFFDF7" />
+        <path d="M42 110h186" stroke="#0A8754" stroke-width="5" />
+        <circle cx="33" cy="112" r="5" fill="#FFC300" stroke="#121212" stroke-width="2" />
+        <path d="M170 128a26 26 0 0152 0" fill="#FFFDF7" stroke="#121212" stroke-width="3" />
+        <circle cx="58" cy="132" r="16" fill="#121212" /><circle cx="58" cy="132" r="6" fill="#FFC300" />
+        <circle cx="196" cy="132" r="18" fill="#121212" /><circle cx="196" cy="132" r="7" fill="#FFC300" />
+      </svg>
+
+      <div class="shell">
+        <div class="fares">
+          <div class="fare">
+            <small>SHARED RIDE</small>
+            <b>₦200</b>
+            <span>Split with students<br />going your way</span>
+          </div>
+          <div class="fare">
+            <small>EXCLUSIVE</small>
+            <b>₦500</b>
+            <span>The whole keke,<br />just for you</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chips">
+      <div class="chip">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#121212" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 2.8v5.6c0 4.2-2.8 7.7-7 9.6-4.2-1.9-7-5.4-7-9.6V5.8L12 3z"/><path d="M8.8 12.2l2.3 2.3 4.2-4.6"/></svg>
+        Verified drivers
+      </div>
+      <div class="chip">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#121212" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0113 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg>
+        Live tracking
+      </div>
+      <div class="chip">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#121212" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="9.5" rx="2.5"/><path d="M8 10.5V8a4 4 0 018 0v2.5"/><circle cx="12" cy="15.2" r="1.2"/></svg>
+        Escrow-safe fares
+      </div>
+    </div>
+
+    <div class="cta">
+      <div class="cta-text">
+        <b>Join the waitlist</b>
+        <span id="url">gbera.ng</span>
+      </div>
+      <div class="cta-icon">
+        <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M8.5 7H17v8.5"/></svg>
+      </div>
+    </div>
+
+    <p class="fine">Free to join. Takes a minute. Be first to ride when we launch.</p>
+  </div>
+</div>
+
+<script>
+  const q = new URLSearchParams(location.search);
+  if (q.get('format') === 'status') document.documentElement.classList.add('status');
+  if (q.get('url')) document.getElementById('url').textContent = q.get('url');
+</script>
+</body>
+</html>
