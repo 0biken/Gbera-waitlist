@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gbera 15s Motion</title>
+<!--
+  15-second 9:16 motion ad. The GSAP timeline is paused and driven frame by frame
+  by the render script (window.seek), so every frame is exact.
+  Open in a browser and add ?play to preview it in real time.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=block" rel="stylesheet" />
+<style>
+  :root {
+    --yellow: #FFC300; --night: #0B0B0A; --black: #121212; --paper: #FFFDF7; --cream: #F1EEE3;
+    --green: #0A8754; --red: #E63946; --on-dark: #F5F2E8; --on-dark-soft: rgba(245, 242, 232, 0.7);
+    --display: 'Space Grotesk', system-ui, sans-serif; --body: 'Geist', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #000; }
+
+  .stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--night); color: var(--on-dark); font-family: var(--body); }
+  .abs { position: absolute; }
+  .layer { position: absolute; inset: 0; }
+
+  /* atmosphere (static) */
+  .glow { position: absolute; border-radius: 50%; }
+  .glow.y { width: 1200px; height: 1200px; left: -60px; top: 900px; background: radial-gradient(closest-side, rgba(255,195,0,.32), rgba(255,195,0,0)); }
+  .glow.g { width: 900px; height: 900px; left: -420px; top: -240px; background: radial-gradient(closest-side, rgba(10,135,84,.3), rgba(10,135,84,0)); }
+  .grain { position: absolute; inset: 0; opacity: .08; mix-blend-mode: overlay; z-index: 50; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  .vignette { position: absolute; inset: 0; z-index: 49; background: radial-gradient(120% 80% at 50% 45%, transparent 55%, rgba(0,0,0,.6) 100%); }
+
+  .mask { display: block; overflow: hidden; padding-bottom: .1em; margin-bottom: -.1em; }
+  .mask > span { display: block; }
+  .display { font-family: var(--display); font-weight: 700; letter-spacing: -0.055em; line-height: .9; }
+
+  /* persistent brand corner */
+  .brand { left: 80px; top: 150px; display: flex; align-items: center; gap: 14px; font-family: var(--display); font-weight: 700; font-size: 44px; letter-spacing: -.045em; color: var(--paper); z-index: 40; }
+  .mark { position: relative; width: 44px; height: 44px; border-radius: 50%; background: var(--yellow); }
+  .mark::after { content: ''; position: absolute; inset: 12px; border-radius: 50%; background: var(--night); }
+
+  /* S1 — the clock */
+  #s1 .time { left: 80px; top: 640px; font-size: 270px; color: var(--yellow); white-space: nowrap; }
+  .digit { display: inline-block; position: relative; overflow: hidden; height: 1em; vertical-align: top; line-height: .9; }
+  .digit span { display: block; height: 1em; }
+  #s1 .sub { left: 84px; top: 940px; font-family: var(--display); font-weight: 600; font-size: 76px; letter-spacing: -.04em; color: var(--on-dark); }
+
+  /* S2 — every keke is full */
+  #s2 .head { left: 80px; top: 470px; font-size: 172px; color: var(--paper); }
+  #s2 .head .accent { color: var(--yellow); }
+  #s2 .road { left: 0; right: 0; top: 1420px; height: 3px; background: repeating-linear-gradient(90deg, rgba(245,242,232,.38) 0 26px, transparent 26px 52px); transform-origin: 0 50%; }
+  .car { top: 1090px; width: 560px; }
+  .car svg { width: 100%; display: block; }
+  .full { position: absolute; left: 50%; top: -30px; transform: translateX(-50%);
+    padding: 12px 26px; border-radius: 999px; background: var(--red); color: #fff;
+    font-family: var(--display); font-weight: 700; font-size: 38px; letter-spacing: .06em; box-shadow: 0 20px 40px -16px rgba(230,57,70,.7); }
+
+  /* S3 — the beats */
+  #s3 .beat { left: 80px; font-size: 128px; color: var(--paper); }
+  #s3 .b1 { top: 620px; } #s3 .b2 { top: 790px; } #s3 .b3 { top: 960px; }
+  #s3 .b3 .accent { color: var(--yellow); }
+
+  /* wipe + brand moment */
+  #wipe { left: 540px; top: 960px; width: 3000px; height: 3000px; margin: -1500px 0 0 -1500px; border-radius: 50%; background: var(--yellow); z-index: 30; }
+  #meet { z-index: 31; display: grid; place-items: center; text-align: center; color: var(--black); }
+  #meet .inner { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+  #meet small { font-family: var(--display); font-weight: 600; font-size: 56px; letter-spacing: -.03em; }
+  #meet .word { display: flex; align-items: center; gap: 34px; font-family: var(--display); font-weight: 700; font-size: 250px; letter-spacing: -.065em; line-height: .9; }
+  #meet .bigmark { position: relative; width: 190px; height: 190px; border-radius: 50%; background: var(--black); }
+  #meet .bigmark::after { content: ''; position: absolute; inset: 52px; border-radius: 50%; background: var(--yellow); }
+
+  /* S4 — the product */
+  #s4 .head { left: 80px; top: 300px; font-size: 104px; color: var(--paper); }
+  #s4 .head .accent { color: var(--yellow); }
+  .phone-wrap { left: 320px; top: 700px; }
+  .phone { width: 440px; aspect-ratio: 9 / 18.6; padding: 14px; border-radius: 68px; background: linear-gradient(160deg, #2b2b27, #121211 45%);
+    box-shadow: inset 0 0 0 2px rgba(255,255,255,.16), inset 0 0 0 9px rgba(0,0,0,.6), 0 80px 120px -40px rgba(0,0,0,.85), 0 0 0 1px rgba(255,195,0,.12); }
+  .screen { position: relative; width: 100%; height: 100%; border-radius: 55px; overflow: hidden; background: var(--cream); }
+  .island { position: absolute; top: 16px; left: 50%; transform: translateX(-50%); width: 34%; height: 34px; border-radius: 999px; background: #050505; z-index: 3; }
+  .map { position: absolute; inset: 0 0 30% 0; } .map svg { width: 100%; height: 100%; display: block; }
+  .topbar { position: absolute; z-index: 2; top: 70px; left: 20px; right: 20px; display: flex; align-items: center; gap: 12px; padding: 16px 18px; border-radius: 22px; background: var(--paper); color: var(--black); box-shadow: 0 14px 30px -14px rgba(18,18,18,.35); font-size: 19px; }
+  .topbar .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--green); } .topbar b { font-family: var(--display); font-weight: 600; } .topbar span { color: #6E6B62; }
+  .sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding: 16px 22px 28px; border-radius: 36px 36px 0 0; background: var(--paper); color: var(--black); display: flex; flex-direction: column; gap: 16px; box-shadow: 0 -24px 50px -12px rgba(18,18,18,.25); }
+  .grab { width: 52px; height: 6px; border-radius: 6px; background: #E4E1D6; margin: 0 auto; }
+  .driver { display: flex; align-items: center; gap: 14px; }
+  .avatar { width: 56px; height: 56px; border-radius: 50%; background: var(--black); color: var(--yellow); display: grid; place-items: center; font-family: var(--display); font-weight: 700; font-size: 19px; }
+  .who { flex: 1; line-height: 1.25; } .who b { display: block; font-family: var(--display); font-size: 21px; letter-spacing: -.015em; } .who span { font-size: 16px; color: #6E6B62; }
+  .eta { padding: 9px 15px; border-radius: 999px; background: var(--yellow); font-family: var(--display); font-weight: 700; font-size: 19px; }
+  .fare { display: flex; justify-content: space-between; align-items: center; padding: 16px 18px; border-radius: 20px; background: var(--cream); font-size: 18px; color: #4E4C45; }
+  .fare b { font-family: var(--display); font-size: 21px; color: var(--black); padding: 6px 14px; border-radius: 999px; background: var(--yellow); }
+  .confirm { padding: 18px; border-radius: 999px; background: var(--black); color: #fff; text-align: center; font-family: var(--display); font-weight: 600; font-size: 20px; }
+
+  .float { padding: 8px; border-radius: 34px; background: rgba(255,255,255,.07); box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.12); }
+  .float-core { border-radius: 26px; box-shadow: inset 0 1px 1px rgba(255,255,255,.7), 0 40px 60px -30px rgba(0,0,0,.8); }
+  .ticket .float-core { display: flex; align-items: center; gap: 18px; padding: 22px 28px 22px 22px; background: var(--paper); color: var(--black); }
+  .ticket .ico { display: grid; place-items: center; width: 62px; height: 62px; border-radius: 50%; background: var(--yellow); }
+  .ticket small { display: block; font-family: var(--display); font-weight: 600; font-size: 18px; letter-spacing: .06em; color: #6E6B62; }
+  .ticket b { display: block; font-family: var(--display); font-weight: 700; font-size: 38px; letter-spacing: -.04em; line-height: 1; margin-top: 6px; }
+  .ticket em { display: block; margin-top: 6px; font-style: normal; font-size: 19px; color: #6E6B62; }
+  .pill .float-core { display: flex; align-items: center; gap: 14px; padding: 18px 26px 18px 18px; background: #1C1C19; color: var(--on-dark); font-family: var(--display); font-weight: 600; font-size: 27px; letter-spacing: -.015em; }
+  .pill .ico { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%; background: var(--green); color: #fff; }
+  .live { width: 14px; height: 14px; margin: 0 6px 0 8px; border-radius: 50%; background: #2BD38A; box-shadow: 0 0 0 7px rgba(43,211,138,.2); }
+  #c1 { left: 46px; top: 980px; } #c2 { right: 40px; top: 860px; } #c3 { right: 52px; top: 1200px; }
+
+  /* S5 — end card */
+  #s5 .head { left: 80px; top: 560px; font-size: 168px; color: var(--paper); }
+  #s5 .head .accent { color: var(--yellow); }
+  #s5 .sub { left: 84px; top: 940px; width: 900px; font-size: 42px; line-height: 1.3; letter-spacing: -.01em; color: var(--on-dark-soft); }
+  #s5 .sub b { color: var(--on-dark); font-weight: 500; }
+  #s5 .cta { left: 80px; top: 1170px; display: flex; flex-direction: column; gap: 34px; }
+  .btn { display: inline-flex; align-items: center; gap: 26px; padding: 16px 16px 16px 52px; border-radius: 999px; background: var(--yellow); color: var(--black);
+    font-family: var(--display); font-weight: 700; font-size: 54px; letter-spacing: -.035em; box-shadow: 0 30px 60px -24px rgba(255,195,0,.6), inset 0 1px 1px rgba(255,255,255,.6); }
+  .btn-icon { display: grid; place-items: center; width: 104px; height: 104px; border-radius: 50%; background: var(--black); color: var(--yellow); }
+  .url { font-family: var(--display); font-weight: 600; font-size: 38px; letter-spacing: -.015em; color: var(--on-dark); }
+  .soon { display: inline-flex; align-items: center; gap: 14px; font-family: var(--display); font-weight: 600; font-size: 32px; color: var(--on-dark-soft); }
+  .soon i { width: 13px; height: 13px; border-radius: 50%; background: var(--yellow); box-shadow: 0 0 0 6px rgba(255,195,0,.22); }
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div class="glow g"></div>
+  <div class="glow y"></div>
+
+  <div class="brand abs" id="brand"><span class="mark"></span>Gbera</div>
+
+  <!-- S1 -->
+  <div class="layer" id="s1">
+    <div class="time display abs">
+      <span class="mask"><span>7:5<span class="digit"><span>2</span><span>3</span></span>am.</span></span>
+    </div>
+    <div class="sub abs">Lecture at 8.</div>
+  </div>
+
+  <!-- S2 -->
+  <div class="layer" id="s2">
+    <div class="head display abs">
+      <span class="mask"><span>Every keke</span></span>
+      <span class="mask"><span>is <span class="accent">full.</span></span></span>
+    </div>
+    <div class="road abs"></div>
+    <div class="car abs" id="car1"><span class="full">FULL</span><svg viewBox="0 0 260 170" fill="none"><use href="#keke" /></svg></div>
+    <div class="car abs" id="car2"><span class="full">FULL</span><svg viewBox="0 0 260 170" fill="none"><use href="#keke" /></svg></div>
+  </div>
+
+  <!-- S3 -->
+  <div class="layer" id="s3">
+    <div class="beat b1 display abs"><span class="mask"><span>You waited.</span></span></div>
+    <div class="beat b2 display abs"><span class="mask"><span>You haggled.</span></span></div>
+    <div class="beat b3 display abs">
+      <span class="mask"><span>You walked</span></span>
+      <span class="mask"><span><span class="accent">anyway.</span></span></span>
+    </div>
+  </div>
+
+  <!-- wipe + brand moment -->
+  <div class="abs" id="wipe"></div>
+  <div class="layer" id="meet">
+    <div class="inner">
+      <small>Meet</small>
+      <div class="word"><span class="bigmark"></span>Gbera</div>
+    </div>
+  </div>
+
+  <!-- S4 -->
+  <div class="layer" id="s4">
+    <div class="head display abs">
+      <span class="mask"><span>Campus keke,</span></span>
+      <span class="mask"><span class="accent">finally sorted.</span></span>
+    </div>
+    <div class="phone-wrap abs" id="phone">
+      <div class="phone"><div class="screen">
+        <span class="island"></span>
+        <div class="map">
+          <svg viewBox="0 0 400 560" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <mask id="draw" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="560">
+                <path id="routeMask" d="M60 462 C 110 446 160 370 210 300 S 290 182 350 150" stroke="#fff" stroke-width="30" fill="none" stroke-linecap="round" />
+              </mask>
+            </defs>
+            <rect width="400" height="560" fill="#F1EEE3" />
+            <g fill="#0A8754" opacity=".13">
+              <path d="M10 150 C 50 110 130 120 150 170 C 165 220 110 255 50 245 C 0 235 -10 190 10 150 Z" />
+              <path d="M240 380 C 290 350 400 360 410 410 C 420 460 350 500 290 490 C 240 480 210 410 240 380 Z" />
+            </g>
+            <g fill="#E6E1D0"><rect x="200" y="140" width="90" height="70" rx="10" /><rect x="30" y="300" width="100" height="80" rx="10" /><rect x="300" y="250" width="80" height="80" rx="10" /><rect x="170" y="430" width="80" height="60" rx="10" /></g>
+            <g fill="none" stroke-linecap="round">
+              <g stroke="#D9D4C2" stroke-width="30"><path d="M-20 470 C 90 450 150 360 210 300 S 300 170 420 120" /><path d="M60 -20 C 90 120 160 220 210 300 S 260 460 300 600" /><path d="M-20 240 C 120 250 260 200 420 220" /></g>
+              <g stroke="#FFFDF7" stroke-width="22"><path d="M-20 470 C 90 450 150 360 210 300 S 300 170 420 120" /><path d="M60 -20 C 90 120 160 220 210 300 S 260 460 300 600" /><path d="M-20 240 C 120 250 260 200 420 220" /></g>
+              <g mask="url(#draw)">
+                <path id="route" d="M60 462 C 110 446 160 370 210 300 S 290 182 350 150" stroke="#FFC300" stroke-width="16" opacity=".6" />
+                <path d="M60 462 C 110 446 160 370 210 300 S 290 182 350 150" stroke="#121212" stroke-width="6" stroke-dasharray="1 15" />
+              </g>
+            </g>
+            <circle cx="60" cy="462" r="13" fill="#FFC300" stroke="#121212" stroke-width="4" /><circle cx="60" cy="462" r="4" fill="#121212" />
+            <circle cx="350" cy="150" r="13" fill="#FFC300" stroke="#121212" stroke-width="4" /><circle cx="350" cy="150" r="4" fill="#121212" />
+            <circle id="carHalo" cx="60" cy="462" r="24" fill="#121212" opacity=".14" />
+            <circle id="carDot" cx="60" cy="462" r="15" fill="#121212" stroke="#FFC300" stroke-width="5" />
+          </svg>
+        </div>
+        <div class="topbar"><span class="dot"></span><b>Kuti Hall</b><span>to Faculty of Science</span></div>
+        <div class="sheet">
+          <span class="grab"></span>
+          <div class="driver"><span class="avatar">UI</span><div class="who"><b>Your driver is close</b><span>Verified, Keke UI-214</span></div><span class="eta">3 min</span></div>
+          <div class="fare"><span>Shared ride</span><b>Seat saved</b></div>
+          <div class="confirm">Confirm pickup</div>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="float ticket abs" id="c1"><div class="float-core">
+      <span class="ico"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#121212" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+      <span><small>SEAT SAVED</small><b>Kuti Hall</b><em>to Faculty of Science</em></span>
+    </div></div>
+    <div class="float pill abs" id="c2"><div class="float-core"><span class="live"></span>Arriving in 3 min</div></div>
+    <div class="float pill abs" id="c3"><div class="float-core">
+      <span class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 2.8v5.6c0 4.2-2.8 7.7-7 9.6-4.2-1.9-7-5.4-7-9.6V5.8L12 3z"/><path d="M8.8 12.2l2.3 2.3 4.2-4.6"/></svg></span>Verified driver
+    </div></div>
+  </div>
+
+  <!-- S5 -->
+  <div class="layer" id="s5">
+    <div class="head display abs">
+      <span class="mask"><span>Early riders</span></span>
+      <span class="mask"><span class="accent">go first.</span></span>
+    </div>
+    <p class="sub abs">Verified drivers. Live tracking. Pickup at the places you already know. <b>Coming to UI.</b></p>
+    <div class="cta abs">
+      <span class="btn" id="btn">Save your seat
+        <span class="btn-icon"><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M8.5 7H17v8.5"/></svg></span>
+      </span>
+      <span class="url" id="url">gbera-waitlist-app.vercel.app</span>
+    </div>
+  </div>
+
+  <div class="vignette"></div>
+  <div class="grain"></div>
+</div>
+
+<!-- keke symbol (yellow body) -->
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="keke" viewBox="0 0 260 170">
+    <ellipse cx="132" cy="152" rx="104" ry="6" fill="#000" opacity=".35" />
+    <path d="M84 26h128c9 0 16 7 16 16v4H66l6-10c3-6 7-10 12-10z" fill="#1E1E1B" />
+    <path d="M196 46h32v74h-32z" fill="#FFC300" />
+    <path d="M204 56h16v26h-16z" fill="#121212" opacity=".85" />
+    <path d="M140 78c0-3 2-5 5-5h45c3 0 6 2 6 5v26h-56V78z" fill="#121212" opacity=".82" />
+    <path d="M124 46v52" stroke="#1E1E1B" stroke-width="5" stroke-linecap="round" />
+    <path d="M72 46c-12 14-20 30-24 50h26l14-50H72z" fill="#F5F2E8" opacity=".18" />
+    <path d="M72 46c-12 14-20 30-24 50" stroke="#1E1E1B" stroke-width="5" stroke-linecap="round" />
+    <path d="M52 94h176v28a6 6 0 01-6 6H34a8 8 0 01-8-8c0-12 10-22 26-26z" fill="#FFC300" />
+    <path d="M42 110h186" stroke="#121212" stroke-width="5" />
+    <circle cx="33" cy="112" r="5" fill="#FFF8DC" stroke="#121212" stroke-width="2" />
+    <path d="M170 128a26 26 0 0152 0" fill="#FFC300" stroke="#121212" stroke-width="3" />
+    <circle cx="58" cy="132" r="16" fill="#121212" /><circle cx="58" cy="132" r="6" fill="#FFC300" />
+    <circle cx="196" cy="132" r="18" fill="#121212" /><circle cx="196" cy="132" r="7" fill="#FFC300" />
+  </symbol>
+</svg>
+
+<script src="../gbera-waitlist-app/node_modules/gsap/dist/gsap.min.js"></script>
+<script>
+  if (!window.gsap) document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"><\/script>');
+</script>
+<script>
+(function () {
+  const q = new URLSearchParams(location.search);
+  if (q.get('url')) document.getElementById('url').textContent = q.get('url');
+
+  const $ = s => document.querySelector(s);
+  const $$ = s => [...document.querySelectorAll(s)];
+  const E = 'expo.out', EIO = 'expo.inOut';
+
+  // initial states
+  gsap.set(['#s2', '#s3', '#s4', '#s5', '#meet'], { autoAlpha: 0 });
+  gsap.set('#s1 .mask > span, #s2 .mask > span, #s3 .mask > span, #s4 .mask > span, #s5 .mask > span', { yPercent: 115 });
+  gsap.set('#s1 .sub', { autoAlpha: 0, y: 40 });
+  gsap.set('#s2 .road', { scaleX: 0 });
+  gsap.set(['#car1', '#car2'], { x: -720 });
+  gsap.set('#wipe', { scale: 0 });
+  gsap.set('#meet .inner', { scale: 0.86, autoAlpha: 0 });
+  gsap.set('#phone', { y: 520, rotate: -4, autoAlpha: 0 });
+  gsap.set(['#c1', '#c2', '#c3'], { scale: 0.7, autoAlpha: 0 });
+  gsap.set('#s5 .sub, #s5 .cta', { autoAlpha: 0, y: 50 });
+  gsap.set('#brand', { autoAlpha: 0, y: -20 });
+
+  // route draw + moving driver dot
+  const route = $('#route'), mask = $('#routeMask');
+  const L = route.getTotalLength();
+  gsap.set(mask, { attr: { 'stroke-dasharray': L, 'stroke-dashoffset': L } });
+  const drive = { p: 0 };
+  const placeDot = () => {
+    const pt = route.getPointAtLength(drive.p * L);
+    $('#carDot').setAttribute('cx', pt.x); $('#carDot').setAttribute('cy', pt.y);
+    $('#carHalo').setAttribute('cx', pt.x); $('#carHalo').setAttribute('cy', pt.y);
+  };
+
+  const tl = gsap.timeline({ paused: true, defaults: { ease: E } });
+
+  // S1 — 7:52am, lecture at 8, the minute ticks over
+  tl.to('#brand', { autoAlpha: 1, y: 0, duration: 0.8 }, 0.1)
+    .to('#s1 .mask > span', { yPercent: 0, duration: 1.0 }, 0.15)
+    .to('#s1 .sub', { autoAlpha: 1, y: 0, duration: 0.8 }, 0.75)
+    .to('#s1 .digit span', { yPercent: -100, duration: 0.45, ease: 'power3.inOut' }, 1.85)
+    .to('#s1', { autoAlpha: 0, y: -80, duration: 0.5, ease: 'power2.in' }, 2.45);
+
+  // S2 — every keke is full
+  tl.set('#s2', { autoAlpha: 1 }, 2.7)
+    .to('#s2 .mask > span', { yPercent: 0, duration: 0.9, stagger: 0.14 }, 2.75)
+    .to('#s2 .road', { scaleX: 1, duration: 1.0, ease: EIO }, 2.8)
+    .to('#car1', { x: 1320, duration: 1.7, ease: 'power1.inOut' }, 3.0)
+    .to('#car2', { x: 1320, duration: 1.55, ease: 'power1.inOut' }, 4.15)
+    .to('#s2', { autoAlpha: 0, y: -80, duration: 0.5, ease: 'power2.in' }, 5.55);
+
+  // S3 — you waited, you haggled, you walked anyway
+  tl.set('#s3', { autoAlpha: 1 }, 5.85)
+    .to('#s3 .b1 .mask > span', { yPercent: 0, duration: 0.7 }, 5.9)
+    .to('#s3 .b2 .mask > span', { yPercent: 0, duration: 0.7 }, 6.5)
+    .to('#s3 .b1', { opacity: 0.28, duration: 0.4, ease: 'power2.out' }, 6.5)
+    .to('#s3 .b3 .mask > span', { yPercent: 0, duration: 0.8, stagger: 0.12 }, 7.1)
+    .to('#s3 .b2', { opacity: 0.28, duration: 0.4, ease: 'power2.out' }, 7.1);
+
+  // yellow wipe, brand moment
+  tl.to('#brand', { autoAlpha: 0, duration: 0.3, ease: 'power2.out' }, 8.15)
+    .to('#wipe', { scale: 1, duration: 0.75, ease: EIO }, 8.15)
+    .set('#s3', { autoAlpha: 0 }, 8.8)
+    .to('#meet', { autoAlpha: 1, duration: 0.01 }, 8.7)
+    .to('#meet .inner', { autoAlpha: 1, scale: 1, duration: 0.9 }, 8.72)
+    .to('#meet .inner', { autoAlpha: 0, scale: 1.06, duration: 0.4, ease: 'power2.in' }, 9.75)
+    .to('#wipe', { scale: 0, duration: 0.7, ease: EIO }, 9.85)
+    .set('#meet', { autoAlpha: 0 }, 10.2);
+
+  // S4 — the product
+  tl.set('#s4', { autoAlpha: 1 }, 10.0)
+    .to('#brand', { autoAlpha: 1, duration: 0.5, ease: 'power2.out' }, 10.2)
+    .to('#s4 .mask > span', { yPercent: 0, duration: 0.9, stagger: 0.12 }, 10.25)
+    .to('#phone', { y: 0, rotate: 0, autoAlpha: 1, duration: 1.1 }, 10.2)
+    .to(mask, { attr: { 'stroke-dashoffset': 0 }, duration: 1.2, ease: 'power2.inOut' }, 10.75)
+    .to(drive, { p: 1, duration: 1.7, ease: 'power1.inOut', onUpdate: placeDot }, 10.85)
+    .to('#c1', { scale: 1, autoAlpha: 1, rotate: -5, duration: 0.7, ease: 'back.out(1.6)' }, 11.05)
+    .to('#c2', { scale: 1, autoAlpha: 1, rotate: 4, duration: 0.7, ease: 'back.out(1.6)' }, 11.35)
+    .to('#c3', { scale: 1, autoAlpha: 1, rotate: -3, duration: 0.7, ease: 'back.out(1.6)' }, 11.65)
+    .to('#s4', { autoAlpha: 0, y: -60, duration: 0.5, ease: 'power2.in' }, 12.55);
+
+  // S5 — end card
+  tl.set('#s5', { autoAlpha: 1 }, 12.85)
+    .to('#s5 .mask > span', { yPercent: 0, duration: 0.95, stagger: 0.13 }, 12.9)
+    .to('#s5 .sub', { autoAlpha: 1, y: 0, duration: 0.8 }, 13.25)
+    .to('#s5 .cta', { autoAlpha: 1, y: 0, duration: 0.8 }, 13.45)
+    .to('#btn', { scale: 1.04, duration: 0.45, ease: 'sine.inOut', yoyo: true, repeat: 1, transformOrigin: '0% 50%' }, 14.15)
+    .to({}, { duration: 0.01 }, 15.0); // pin total length to 15s
+
+  placeDot();
+  window.TL = tl;
+  window.DURATION = 15;
+  window.seek = t => { tl.seek(t, false); };
+
+  document.fonts.ready.then(() => {
+    window.__ready = true;
+    if (q.has('play')) tl.play(0);
+  });
+})();
+</script>
+</body>
+</html>
