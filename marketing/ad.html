@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gbera Waitlist Ad</title>
+<!--
+  Paid / organic ad creative. Render with the marketing render script.
+  Query params:  ?format=square (1080x1080) | feed (1080x1350, default) | story (1080x1920)
+                 &url=gbera-waitlist-app.vercel.app
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=block" rel="stylesheet" />
+<style>
+  :root {
+    --yellow: #FFC300;
+    --night: #0B0B0A;
+    --black: #121212;
+    --paper: #FFFDF7;
+    --cream: #F1EEE3;
+    --green: #0A8754;
+    --on-dark: #F5F2E8;
+    --on-dark-soft: rgba(245, 242, 232, 0.72);
+    --display: 'Space Grotesk', system-ui, sans-serif;
+    --body: 'Geist', system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #333; }
+
+  .ad {
+    position: relative;
+    width: 1080px;
+    height: 1350px;
+    overflow: hidden;
+    color: var(--on-dark);
+    font-family: var(--body);
+    background: var(--night);
+  }
+  .square .ad { height: 1080px; }
+  .story .ad  { height: 1920px; }
+
+  /* ---------- atmosphere ---------- */
+  .glow {
+    position: absolute;
+    width: 980px; height: 980px;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(255, 195, 0, 0.55), rgba(255, 195, 0, 0.16) 55%, rgba(255, 195, 0, 0) 100%);
+    filter: blur(10px);
+  }
+  .glow-2 {
+    position: absolute;
+    width: 760px; height: 760px;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(10, 135, 84, 0.32), rgba(10, 135, 84, 0) 100%);
+  }
+  .roads { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.16; }
+  .grain {
+    position: absolute; inset: 0; opacity: 0.09; mix-blend-mode: overlay; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .vignette { position: absolute; inset: 0; background: radial-gradient(120% 90% at 50% 40%, transparent 55%, rgba(0, 0, 0, 0.55) 100%); }
+
+  /* ---------- type & UI ---------- */
+  .abs { position: absolute; }
+
+  .brand { display: flex; align-items: center; gap: 14px; font-family: var(--display); font-weight: 700; font-size: 44px; letter-spacing: -0.045em; color: var(--paper); }
+  .mark { position: relative; width: 44px; height: 44px; border-radius: 50%; background: var(--yellow); }
+  .mark::after { content: ''; position: absolute; inset: 12px; border-radius: 50%; background: var(--night); }
+
+  .soon {
+    display: flex; align-items: center; gap: 12px;
+    padding: 13px 22px 13px 18px; border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.14);
+    font-family: var(--display); font-weight: 600; font-size: 23px; letter-spacing: -0.005em; color: var(--on-dark);
+  }
+  .soon i { width: 10px; height: 10px; border-radius: 50%; background: var(--yellow); box-shadow: 0 0 0 5px rgba(255, 195, 0, 0.22); }
+
+  h1 {
+    font-family: var(--display);
+    font-weight: 700;
+    line-height: 0.9;
+    letter-spacing: -0.055em;
+    white-space: nowrap;
+  }
+  h1 span { display: block; }
+  h1 .price { color: var(--yellow); }
+
+  .sub { font-size: 33px; line-height: 1.34; letter-spacing: -0.01em; color: var(--on-dark-soft); }
+  .sub b { color: var(--on-dark); font-weight: 500; }
+
+  .cta { display: flex; align-items: center; gap: 26px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 22px;
+    padding: 12px 12px 12px 40px; border-radius: 999px;
+    background: var(--yellow); color: var(--black);
+    font-family: var(--display); font-weight: 700; font-size: 36px; letter-spacing: -0.03em;
+    box-shadow: 0 24px 50px -20px rgba(255, 195, 0, 0.55), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+  }
+  .btn-icon { display: grid; place-items: center; width: 76px; height: 76px; border-radius: 50%; background: var(--black); color: var(--yellow); }
+  .url { font-family: var(--display); font-weight: 500; font-size: 25px; letter-spacing: -0.01em; color: var(--on-dark-soft); line-height: 1.3; }
+  .url b { display: block; font-weight: 600; color: var(--on-dark); }
+
+  /* ---------- phone ---------- */
+  .phone {
+    width: 440px;
+    aspect-ratio: 9 / 18.6;
+    padding: 14px;
+    border-radius: 68px;
+    background: linear-gradient(160deg, #2b2b27, #121211 45%);
+    box-shadow:
+      inset 0 0 0 2px rgba(255, 255, 255, 0.16),
+      inset 0 0 0 9px rgba(0, 0, 0, 0.6),
+      0 80px 120px -40px rgba(0, 0, 0, 0.85),
+      0 0 0 1px rgba(255, 195, 0, 0.12);
+  }
+  .screen { position: relative; width: 100%; height: 100%; border-radius: 55px; overflow: hidden; background: var(--cream); }
+  .island { position: absolute; top: 16px; left: 50%; transform: translateX(-50%); width: 34%; height: 34px; border-radius: 999px; background: #050505; z-index: 3; }
+  .map { position: absolute; inset: 0 0 30% 0; }
+  .map svg { width: 100%; height: 100%; display: block; }
+  .topbar {
+    position: absolute; z-index: 2; top: 70px; left: 20px; right: 20px;
+    display: flex; align-items: center; gap: 12px;
+    padding: 16px 18px; border-radius: 22px;
+    background: var(--paper); color: var(--black);
+    box-shadow: 0 14px 30px -14px rgba(18, 18, 18, 0.35);
+    font-size: 19px;
+  }
+  .topbar .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--green); flex: 0 0 auto; }
+  .topbar b { font-family: var(--display); font-weight: 600; letter-spacing: -0.01em; }
+  .topbar span { color: #6E6B62; }
+
+  .sheet {
+    position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
+    padding: 16px 22px 28px; border-radius: 36px 36px 0 0;
+    background: var(--paper); color: var(--black);
+    display: flex; flex-direction: column; gap: 16px;
+    box-shadow: 0 -24px 50px -12px rgba(18, 18, 18, 0.25);
+  }
+  .grab { width: 52px; height: 6px; border-radius: 6px; background: #E4E1D6; margin: 0 auto; }
+  .driver { display: flex; align-items: center; gap: 14px; }
+  .avatar { width: 56px; height: 56px; border-radius: 50%; background: var(--black); color: var(--yellow); display: grid; place-items: center; font-family: var(--display); font-weight: 700; font-size: 19px; flex: 0 0 auto; }
+  .who { flex: 1; line-height: 1.25; }
+  .who b { display: block; font-family: var(--display); font-size: 21px; letter-spacing: -0.015em; }
+  .who span { display: flex; align-items: center; gap: 6px; font-size: 16px; color: #6E6B62; }
+  .who svg { color: var(--green); }
+  .eta { padding: 9px 15px; border-radius: 999px; background: var(--yellow); font-family: var(--display); font-weight: 700; font-size: 19px; }
+  .fare { display: flex; justify-content: space-between; align-items: baseline; padding: 16px 18px; border-radius: 20px; background: var(--cream); }
+  .fare span { font-size: 18px; color: #4E4C45; }
+  .fare b { font-family: var(--display); font-size: 32px; letter-spacing: -0.04em; }
+  .fare b.locked { font-size: 22px; letter-spacing: -0.01em; padding: 6px 14px; border-radius: 999px; background: var(--yellow); }
+  .confirm { padding: 18px; border-radius: 999px; background: var(--black); color: #fff; text-align: center; font-family: var(--display); font-weight: 600; font-size: 20px; }
+
+  /* ---------- floating cards (double bezel) ---------- */
+  .float { padding: 8px; border-radius: 34px; background: rgba(255, 255, 255, 0.07); box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.12); }
+  .float-core { border-radius: 26px; box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.7), 0 40px 60px -30px rgba(0, 0, 0, 0.8); }
+
+  .ticket .float-core { display: flex; align-items: center; gap: 18px; padding: 22px 28px 22px 22px; background: var(--paper); color: var(--black); }
+  .ticket .ico { display: grid; place-items: center; width: 62px; height: 62px; border-radius: 50%; background: var(--yellow); }
+  .ticket small { display: block; font-family: var(--display); font-weight: 600; font-size: 18px; letter-spacing: 0.06em; color: #6E6B62; }
+  .ticket b { display: block; font-family: var(--display); font-weight: 700; font-size: 38px; letter-spacing: -0.04em; line-height: 1; margin-top: 6px; }
+  .ticket em { display: block; margin-top: 6px; font-style: normal; font-size: 19px; color: #6E6B62; }
+
+  .pill .float-core { display: flex; align-items: center; gap: 14px; padding: 18px 26px 18px 18px; background: #1C1C19; color: var(--on-dark); font-family: var(--display); font-weight: 600; font-size: 25px; letter-spacing: -0.015em; }
+  .pill .ico { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%; }
+  .ico-green { background: var(--green); color: #fff; }
+  .live { width: 14px; height: 14px; margin: 0 6px 0 8px; border-radius: 50%; background: #2BD38A; box-shadow: 0 0 0 7px rgba(43, 211, 138, 0.2); }
+
+  /* ================= LAYOUTS ================= */
+
+  /* --- feed 1080x1350 --- */
+  .feed .glow   { left: 50px; top: 640px; }
+  .feed .glow-2 { left: -380px; top: -300px; }
+  .feed .brand  { left: 72px; top: 72px; }
+  .feed .soon   { right: 72px; top: 70px; }
+  .feed h1      { left: 72px; top: 178px; font-size: 136px; }
+  .feed .sub    { left: 72px; top: 572px; width: 860px; font-size: 31px; }
+  .feed .cta    { left: 72px; top: 690px; }
+  .feed .phone-wrap { left: 330px; top: 860px; transform: rotate(-4deg); }
+  .feed .ticket { left: 46px; top: 1100px; transform: rotate(-5deg); }
+  .feed .pill-eta { right: 52px; top: 900px; transform: rotate(4deg); }
+  .feed .pill-ver { right: 66px; top: 1090px; transform: rotate(-3deg); }
+
+  /* --- square 1080x1080 --- */
+  .square .glow   { left: 380px; top: 380px; width: 900px; height: 900px; }
+  .square .glow-2 { left: -420px; top: -360px; }
+  .square .brand  { left: 64px; top: 64px; }
+  .square .soon   { right: 64px; top: 62px; }
+  .square h1      { left: 64px; top: 168px; font-size: 104px; }
+  .square .sub    { left: 64px; top: 474px; width: 500px; font-size: 27px; }
+  .square .cta    { left: 64px; top: 680px; flex-direction: column; align-items: flex-start; gap: 18px; }
+  .square .phone-wrap { left: 612px; top: 372px; transform: rotate(7deg) scale(0.86); transform-origin: 0 0; }
+  .square .ticket { left: 500px; top: 712px; transform: rotate(-6deg); }
+  .square .pill-eta { right: 30px; top: 470px; transform: rotate(5deg); display: none; }
+  .square .pill-ver { display: none; }
+
+  /* --- story 1080x1920 (keeps copy inside the 250px top/bottom overlay-safe band) --- */
+  .story .glow   { left: 50px; top: 760px; width: 1000px; height: 1000px; }
+  .story .glow-2 { left: -380px; top: 40px; }
+  .story .brand  { left: 72px; top: 150px; }
+  .story .soon   { right: 72px; top: 148px; }
+  .story h1      { left: 72px; top: 280px; font-size: 150px; }
+  .story .sub    { left: 72px; top: 712px; width: 900px; font-size: 35px; }
+  .story .phone-wrap { left: 372px; top: 870px; transform: scale(0.76); transform-origin: 0 0; }
+  .story .ticket { left: 56px; top: 1090px; transform: rotate(-5deg); }
+  .story .pill-eta { right: 52px; top: 960px; transform: rotate(4deg); }
+  .story .pill-ver { right: 60px; top: 1270px; transform: rotate(-3deg); }
+  .story .cta    { left: 72px; right: 72px; top: 1572px; justify-content: center; }
+</style>
+</head>
+<body>
+<div class="ad">
+  <div class="glow abs"></div>
+  <div class="glow-2 abs"></div>
+  <svg class="roads" viewBox="0 0 1080 1350" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <g fill="none" stroke="#FFC300" stroke-width="1.6">
+      <path d="M-40 1100 C 220 1080 360 860 600 840 S 960 600 1120 360" />
+      <path d="M-40 1160 C 260 1150 400 930 640 910 S 1000 680 1120 440" />
+      <path d="M140 1400 C 220 1100 420 900 520 600 S 600 120 660 -40" />
+    </g>
+  </svg>
+
+  <div class="brand abs"><span class="mark"></span>Gbera</div>
+  <div class="soon abs"><i></i>Coming to UI</div>
+
+  <h1 class="abs"><span class="price">7:52am.</span><span class="l2">Every keke</span> <span class="l3">is full.</span></h1>
+  <p class="sub abs">You waited at the gate. You haggled. You walked to class anyway. <b>Gbera is fixing campus keke at UI.</b></p>
+
+  <div class="phone-wrap abs">
+    <div class="phone">
+      <div class="screen">
+        <span class="island"></span>
+        <div class="map">
+          <svg viewBox="0 0 400 560" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <rect width="400" height="560" fill="#F1EEE3" />
+            <g fill="#0A8754" opacity="0.13">
+              <path d="M10 150 C 50 110 130 120 150 170 C 165 220 110 255 50 245 C 0 235 -10 190 10 150 Z" />
+              <path d="M240 380 C 290 350 400 360 410 410 C 420 460 350 500 290 490 C 240 480 210 410 240 380 Z" />
+            </g>
+            <g fill="#E6E1D0">
+              <rect x="200" y="140" width="90" height="70" rx="10" /><rect x="30" y="300" width="100" height="80" rx="10" />
+              <rect x="300" y="250" width="80" height="80" rx="10" /><rect x="170" y="430" width="80" height="60" rx="10" />
+            </g>
+            <g fill="none" stroke-linecap="round">
+              <g stroke="#D9D4C2" stroke-width="30">
+                <path d="M-20 470 C 90 450 150 360 210 300 S 300 170 420 120" />
+                <path d="M60 -20 C 90 120 160 220 210 300 S 260 460 300 600" />
+                <path d="M-20 240 C 120 250 260 200 420 220" />
+              </g>
+              <g stroke="#FFFDF7" stroke-width="22">
+                <path d="M-20 470 C 90 450 150 360 210 300 S 300 170 420 120" />
+                <path d="M60 -20 C 90 120 160 220 210 300 S 260 460 300 600" />
+                <path d="M-20 240 C 120 250 260 200 420 220" />
+              </g>
+              <path d="M60 462 C 110 446 160 370 210 300 S 290 182 350 150" stroke="#FFC300" stroke-width="16" opacity="0.6" />
+              <path d="M60 462 C 110 446 160 370 210 300 S 290 182 350 150" stroke="#121212" stroke-width="6" stroke-dasharray="1 15" />
+            </g>
+            <circle cx="60" cy="462" r="13" fill="#FFC300" stroke="#121212" stroke-width="4" /><circle cx="60" cy="462" r="4" fill="#121212" />
+            <circle cx="350" cy="150" r="13" fill="#FFC300" stroke="#121212" stroke-width="4" /><circle cx="350" cy="150" r="4" fill="#121212" />
+            <circle cx="210" cy="300" r="24" fill="#121212" opacity="0.14" />
+            <circle cx="210" cy="300" r="15" fill="#121212" stroke="#FFC300" stroke-width="5" />
+          </svg>
+        </div>
+        <div class="topbar"><span class="dot"></span><b>Kuti Hall</b><span>to Faculty of Science</span></div>
+        <div class="sheet">
+          <span class="grab"></span>
+          <div class="driver">
+            <span class="avatar">UI</span>
+            <div class="who">
+              <b>Your driver is close</b>
+              <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Verified, Keke UI-214</span>
+            </div>
+            <span class="eta">3 min</span>
+          </div>
+          <div class="fare"><span>Shared ride</span><b class="locked">Seat saved</b></div>
+          <div class="confirm">Confirm pickup</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="float ticket abs">
+    <div class="float-core">
+      <span class="ico"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#121212" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+      <span><small>SEAT SAVED</small><b>Kuti Hall</b><em>to Faculty of Science</em></span>
+    </div>
+  </div>
+
+  <div class="float pill pill-eta abs">
+    <div class="float-core"><span class="live"></span>Arriving in 3 min</div>
+  </div>
+
+  <div class="float pill pill-ver abs">
+    <div class="float-core">
+      <span class="ico ico-green"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 2.8v5.6c0 4.2-2.8 7.7-7 9.6-4.2-1.9-7-5.4-7-9.6V5.8L12 3z"/><path d="M8.8 12.2l2.3 2.3 4.2-4.6"/></svg></span>
+      Verified driver
+    </div>
+  </div>
+
+  <div class="cta abs">
+    <span class="btn">Save your seat
+      <span class="btn-icon"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M8.5 7H17v8.5"/></svg></span>
+    </span>
+    <span class="url">Early riders go first. Free.<b id="url">gbera-waitlist-app.vercel.app</b></span>
+  </div>
+
+  <div class="vignette abs" style="pointer-events:none"></div>
+  <div class="grain"></div>
+</div>
+
+<script>
+  const q = new URLSearchParams(location.search);
+  document.documentElement.classList.add(q.get('format') || 'feed');
+  if (q.get('url')) document.getElementById('url').textContent = q.get('url');
+
+  // Shrink the headline until its widest line fits the safe width (never grow).
+  document.fonts.ready.then(() => {
+    const h1 = document.querySelector('h1');
+    const ad = document.querySelector('.ad');
+    const max = ad.clientWidth - 2 * h1.offsetLeft;
+    let size = parseFloat(getComputedStyle(h1).fontSize);
+    while (h1.scrollWidth > max && size > 60) {
+      size -= 2;
+      h1.style.fontSize = size + 'px';
+    }
+    window.__ready = true;
+  });
+</script>
+</body>
+</html>
